@@ -19,9 +19,9 @@ func createRandomAccount() (CreateAccountParams, Account, error) {
 
 	return arg, account, err
 }
+
 func TestCreateAccount(t *testing.T) {
 	arg, newAccount, err := createRandomAccount()
-
 	require.NoError(t, err)
 	require.NotEmpty(t, newAccount)
 	require.Equal(t, arg.Owner, newAccount.Owner)
@@ -35,7 +35,6 @@ func TestGetAccount(t *testing.T) {
 	_, newAccount, _ := createRandomAccount()
 
 	fetchedAccount, err := testQueries.GetAccount(context.Background(), newAccount.ID)
-
 	require.NoError(t, err)
 	require.NotEmpty(t, fetchedAccount)
 	require.Equal(t, newAccount.ID, fetchedAccount.ID)
@@ -53,7 +52,6 @@ func TestUpdateAccount(t *testing.T) {
 		Balance: random.Int64Between(1, 100000),
 	}
 	fetchedAccount, err := testQueries.UpdateAccount(context.Background(), arg)
-
 	require.NoError(t, err)
 	require.NotEmpty(t, fetchedAccount)
 	require.Equal(t, newAccount.ID, fetchedAccount.ID)
@@ -67,11 +65,9 @@ func TestDeleteAccount(t *testing.T) {
 	_, newAccount, _ := createRandomAccount()
 
 	err := testQueries.DeleteAccount(context.Background(), newAccount.ID)
-
 	require.NoError(t, err)
 
 	fetchedAccount, err := testQueries.GetAccount(context.Background(), newAccount.ID)
-
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, fetchedAccount)
@@ -86,12 +82,9 @@ func TestListAccounts(t *testing.T) {
 		Limit:  5,
 		Offset: 5,
 	}
-
 	fetchedAccounts, err := testQueries.ListAccounts(context.Background(), arg)
-
 	require.NoError(t, err)
 	require.Len(t, fetchedAccounts, 5)
-
 	for _, account := range fetchedAccounts {
 		require.NotEmpty(t, account)
 	}
