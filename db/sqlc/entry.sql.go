@@ -54,7 +54,7 @@ func (q *Queries) GetEntry(ctx context.Context, id int64) (Entry, error) {
 }
 
 const listEntry = `-- name: ListEntry :many
-SELECT id, account_id, amount, created_at FROM entries ORDER BY name LIMIT $1 OFFSET $2
+SELECT id, account_id, amount, created_at FROM entries ORDER BY account_id LIMIT $1 OFFSET $2
 `
 
 type ListEntryParams struct {
