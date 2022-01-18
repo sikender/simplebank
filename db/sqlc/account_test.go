@@ -5,11 +5,8 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/require"
 )
-
-var random = faker.New()
 
 func createRandomAccount() (CreateAccountParams, Account, error) {
 	arg := CreateAccountParams{
@@ -23,15 +20,15 @@ func createRandomAccount() (CreateAccountParams, Account, error) {
 	return arg, account, err
 }
 func TestCreateAccount(t *testing.T) {
-	arg, account, err := createRandomAccount()
+	arg, newAccount, err := createRandomAccount()
 
 	require.NoError(t, err)
-	require.NotEmpty(t, account)
-	require.Equal(t, arg.Owner, account.Owner)
-	require.Equal(t, arg.Balance, account.Balance)
-	require.Equal(t, arg.Currency, account.Currency)
-	require.NotZero(t, account.ID)
-	require.NotZero(t, account.CreatedAt)
+	require.NotEmpty(t, newAccount)
+	require.Equal(t, arg.Owner, newAccount.Owner)
+	require.Equal(t, arg.Balance, newAccount.Balance)
+	require.Equal(t, arg.Currency, newAccount.Currency)
+	require.NotZero(t, newAccount.ID)
+	require.NotZero(t, newAccount.CreatedAt)
 }
 
 func TestGetAccount(t *testing.T) {
@@ -70,6 +67,7 @@ func TestDeleteAccount(t *testing.T) {
 	_, newAccount, _ := createRandomAccount()
 
 	err := testQueries.DeleteAccount(context.Background(), newAccount.ID)
+
 	require.NoError(t, err)
 
 	fetchedAccount, err := testQueries.GetAccount(context.Background(), newAccount.ID)

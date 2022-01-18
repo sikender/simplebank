@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/jaswdr/faker"
 	_ "github.com/lib/pq"
 )
 
@@ -14,6 +15,7 @@ const (
 	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
 )
 
+var random = faker.New()
 var testQueries *Queries
 
 func TestMain(m *testing.M) {
