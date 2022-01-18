@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -46,51 +45,18 @@ func TestGetEntry(t *testing.T) {
 
 }
 
-func TestUpdateEntry(t *testing.T) {
-	_, newAccount, _ := createRandomAccount()
-	_, newEntry, _ := createRandomEntry(newAccount)
-
-	arg := UpdateEntryParams{
-		ID:     newEntry.ID,
-		Amount: random.Int64Between(1, 100000),
-	}
-	fetchedEntry, err := testQueries.UpdateEntry(context.Background(), arg)
-
-	require.NoError(t, err)
-	require.NotEmpty(t, fetchedEntry)
-	require.Equal(t, newEntry.ID, fetchedEntry.ID)
-	require.Equal(t, newEntry.AccountID, fetchedEntry.AccountID)
-	require.Equal(t, arg.Amount, fetchedEntry.Amount)
-	require.Equal(t, newEntry.CreatedAt, fetchedEntry.CreatedAt)
-
-}
-
-func TestDeleteEntry(t *testing.T) {
-	_, newAccount, _ := createRandomAccount()
-	_, newEntry, _ := createRandomEntry(newAccount)
-
-	err := testQueries.DeleteEntry(context.Background(), newEntry.ID)
-
-	require.NoError(t, err)
-
-	fetchedEntry, err := testQueries.GetEntry(context.Background(), newEntry.ID)
-
-	require.EqualError(t, err, sql.ErrNoRows.Error())
-	require.Empty(t, fetchedEntry)
-}
-
 func TestListEntries(t *testing.T) {
 	_, newAccount, _ := createRandomAccount()
 	for i := 0; i < 10; i++ {
 		createRandomEntry(newAccount)
 	}
 
-	arg := ListEntryParams{
+	arg := ListEntriesParams{
 		Limit:  5,
 		Offset: 5,
 	}
 
-	fetchedEntries, err := testQueries.ListEntry(context.Background(), arg)
+	fetchedEntries, err := testQueries.ListEntries(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.Len(t, fetchedEntries, 5)
